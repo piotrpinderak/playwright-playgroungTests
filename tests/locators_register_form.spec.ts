@@ -3,41 +3,106 @@ import { test, expect } from '@playwright/test';
 test('Locators on registration form', async ({ page }) => {
     await page.goto('https://ecommerce-playground.lambdatest.io/index.php?route=account/register');
 
-    //Arrange "First Name" (label)
-    const FirstNameA = page.getByLabel(`First Name`);
-    const FirstNameB = page.getByRole(`textbox`, { name: `First Name` });
-    const FirstNameLabel = page.locator(`label[for="input-firstname"]`);
+    // ---------------------------
+    // FIRST NAME
+    // ---------------------------
 
-    //Assert "First Name" label
-    await expect(FirstNameA).toBeVisible();
-    await expect(FirstNameB).toBeVisible();
-    await expect(FirstNameLabel).toContainText(`First Name`);
+    // Arrange
+    const firstNameInput = page.getByLabel('First Name');
+    const firstNameLabel = page.locator('label[for="input-firstname"]');
 
-    //Arrange "First Name Placeholder"
-    const FirstNameInput = page.getByLabel(`First Name`);    
+    // Assert label
+    await expect(firstNameInput).toBeVisible();
+    await expect(firstNameLabel).toHaveText('First Name');
 
-    // Assert empty "First Name Placeholder"
-    await expect(FirstNameInput).toHaveAttribute(`placeholder`, `First Name`);
+    // Assert placeholder
+    await expect(firstNameInput).toHaveAttribute('placeholder', 'First Name');
 
-    //Act fill "First Name" Placeholder
-    await FirstNameInput.fill(`Piotr`);
-    await FirstNameLabel.fill(`PIOTR`);
+    // Assert required star
+    const firstNameGroup = firstNameLabel.locator('..'); 
+    await expect(firstNameGroup).toHaveClass(/required/);
 
-    //Assert "First Name"
-    await expect(FirstNameLabel).toHaveValue('PIOTR');
+    // Act
+    await firstNameInput.fill('Piotr');
 
-    //Arrange "Last Name" label
-    const LastNameA = page.getByLabel(`Last Name`);
-    const LastNameB = page.getByRole('textbox', {name: `Last Name` });
-    const LastNameLabel = page.locator(`label[for="input-lastname"]`);
-
-    //Assert "Last Name" label
-    await expect(LastNameA).toBeVisible();
-    await expect(LastNameB).toBeVisible();
-    await expect(LastNameLabel).toContainText(`Last Name`);
+    // Assert value
+    await expect(firstNameInput).toHaveValue('Piotr');
 
 
+    // ---------------------------
+    // LAST NAME
+    // ---------------------------
+
+    // Arrange
+    const lastNameInput = page.getByLabel('Last Name');
+    const lastNameLabel = page.locator('label[for="input-lastname"]');
+
+    // Assert label
+    await expect(lastNameInput).toBeVisible();
+    await expect(lastNameLabel).toHaveText('Last Name');
+
+    // Assert placeholder
+    await expect(lastNameInput).toHaveAttribute('placeholder', 'Last Name');
+
+    // Assert required star
+    const lastNameGroup = lastNameLabel.locator('..'); 
+    await expect(lastNameGroup).toHaveClass(/required/);
+
+    // Act
+    await lastNameInput.fill('Pinderak');
+
+    // Assert value
+    await expect(lastNameInput).toHaveValue('Pinderak');
+
+
+    // ---------------------------
+    // EMAIL
+    // ---------------------------
+
+    // Arrange
+    const emailInput = page.getByLabel('E-Mail');
+    const emailLabel = page.locator('label[for="input-email"]');
+
+    // Assert label
+    await expect(emailInput).toBeVisible();
+    await expect(emailLabel).toHaveText('E-Mail');
+
+    // Assert placeholder
+    await expect(emailInput).toHaveAttribute('placeholder', 'E-Mail');
+
+    // Assert required star
+    const emailGroup = emailLabel.locator('..'); 
+    await expect(emailGroup).toHaveClass(/required/);
+
+    // Act
+    await emailInput.fill('abc@gmail.com');
+
+    // Assert value
+    await expect(emailInput).toHaveValue('abc@gmail.com');
+
+
+    // ---------------------------
+    // TELEPHONE
+    // ---------------------------
+
+    // Arrange
+    const telephoneInput = page.getByLabel('Telephone');
+    const telephoneLabel = page.locator('label[for="input-telephone"]');
+
+    // Assert label
+    await expect(telephoneInput).toBeVisible();
+    await expect(telephoneLabel).toContainText('Telephone');
+
+    // Assert required star
+    const telephoneGroup = telephoneLabel.locator('..'); 
+    await expect(telephoneGroup).toHaveClass(/required/);
     
-    
+    // Assert placeholder
+    await expect(telephoneInput).toHaveAttribute('placeholder', 'Telephone');
 
+    // Act
+    await telephoneInput.fill('123456789');
+
+    // Assert value
+    await expect(telephoneInput).toHaveValue('123456789');
 });
