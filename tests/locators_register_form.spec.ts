@@ -62,6 +62,7 @@ test('Locators on registration form', async ({ page }) => {
     // Arrange
     const emailInput = page.getByLabel('E-Mail');
     const emailLabel = page.locator('label[for="input-email"]');
+    const emailGroup = emailLabel.locator('..');
 
     // Assert label
     await expect(emailInput).toBeVisible();
@@ -70,8 +71,7 @@ test('Locators on registration form', async ({ page }) => {
     // Assert placeholder
     await expect(emailInput).toHaveAttribute('placeholder', 'E-Mail');
 
-    // Assert required star
-    const emailGroup = emailLabel.locator('..'); 
+    // Assert required star 
     await expect(emailGroup).toHaveClass(/required/);
 
     // Act
@@ -88,13 +88,14 @@ test('Locators on registration form', async ({ page }) => {
     // Arrange
     const telephoneInput = page.getByLabel('Telephone');
     const telephoneLabel = page.locator('label[for="input-telephone"]');
+    const helpText = page.locator(`#input-telephone-help`);
+    const telephoneGroup = telephoneLabel.locator('..');
 
     // Assert label
     await expect(telephoneInput).toBeVisible();
-    await expect(telephoneLabel).toContainText('Telephone');
+    await expect(telephoneLabel).toHaveText('Telephone');
 
     // Assert required star
-    const telephoneGroup = telephoneLabel.locator('..'); 
     await expect(telephoneGroup).toHaveClass(/required/);
     
     // Assert placeholder
@@ -105,4 +106,101 @@ test('Locators on registration form', async ({ page }) => {
 
     // Assert value
     await expect(telephoneInput).toHaveValue('123456789');
+
+    //Assert helpText
+    await expect(helpText).toHaveText(`Enter valid phone number with country code!`)
+
+    // ---------------------------
+    // PASSWORD
+    // ---------------------------
+
+    //Arrange
+    const yourPassword = page.getByText(`Your Password`);
+    const passwordInput = page.getByLabel(`Password`, { exact: true });
+    const passwordLabel = page.locator(`label[for="input-password"]`)
+    const passwordGroup = passwordLabel.locator(`..`);
+
+    //Assert value
+    await expect(yourPassword).toHaveText(`Your Password`);
+
+    //Assert label
+    await expect(passwordInput).toBeVisible();
+    await expect(passwordLabel).toHaveText(`Password`);
+
+    //Assert required star
+    await expect(passwordGroup).toHaveClass(/required/);
+
+    //Act
+    await passwordLabel.fill(`zxcvbnm`);
+
+    //Assert
+    await expect(passwordLabel).toHaveValue(`zxcvbnm`);
+
+    //Assert placeholder
+    await expect(passwordInput).toHaveAttribute(`placeholder`, `Password`);
+
+    // ---------------------------
+    // PASSWORD CONFIRM
+    // ---------------------------
+
+    //Arrange
+    const passwordConfirmInput = page.getByLabel(`Password Confirm`, { exact: true });
+    const passwordConfirmLabel = page.locator(`label[for="input-confirm"]`);
+
+    //Assert label
+    await expect(passwordConfirmInput).toBeVisible();
+    await expect(passwordConfirmLabel).toHaveText(`Password Confirm`);
+
+    //Act
+    await passwordConfirmInput.fill(`zxcvbnm`);
+
+    //Assert
+    await expect(passwordConfirmInput).toHaveValue(`zxcvbnm`);
+
+    //Assert placeholder
+    await expect(passwordConfirmInput).toHaveAttribute(`placeholder`, `Password Confirm`);
+
+    // ---------------------------
+    // NEWSLETTER
+    // ---------------------------
+
+    //Arrange
+    const newsletter = page.locator('fieldset legend', {hasText: `Newsletter`});
+
+    //Assert
+    await expect(newsletter).toBeVisible();
+    await expect(newsletter).toHaveText(`Newsletter`);
+
+    // ---------------------------
+    // SUBSCRIBE
+    // ---------------------------
+
+    //Arrange
+    const subscribe = page.locator('fieldset label', { hasText: `Subscribe` });
+    const radioButtonYes = page.getByText('Yes', { exact: true });
+    const radioButtonNo = page.getByText(`No`, { exact: true });
+
+    //Assert visibility
+    await expect(subscribe).toBeVisible();
+    await expect(subscribe).toHaveText('Subscribe');
+    await expect(radioButtonYes).toBeVisible();
+    await expect(radioButtonNo).toBeVisible();
+
+    //Assert selection - default state
+    await expect(radioButtonYes).not.toBeChecked();
+    await expect(radioButtonNo).toBeChecked();
+
+    //Act - change selection
+    await radioButtonYes.click();
+
+    //Assert after change
+    await expect(radioButtonYes).toBeChecked();
+    await expect(radioButtonNo).not.toBeChecked();
+
+
+
+
+
+
+ 
 });
