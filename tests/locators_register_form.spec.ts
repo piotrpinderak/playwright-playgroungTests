@@ -197,10 +197,37 @@ test('Locators on registration form', async ({ page }) => {
     await expect(radioButtonYes).toBeChecked();
     await expect(radioButtonNo).not.toBeChecked();
 
+    // ---------------------------
+    // CONSENT CHECKBOX
+    // ---------------------------
+    //Arrange
+    const consentLabel = page.locator(`label[for="input-agree"]`);
+    const privacyLink = consentLabel.locator(`a.agree`);
+    const fullLabelText = (await consentLabel.innerText()).trim();
 
+    //Assert: Label text starts from correct sentence
+    await expect(fullLabelText.startsWith(`I have read and agree to the`)).toBeTruthy();
 
+    // Assert: verify DOM structure and order (text first, then link)
+    await expect(privacyLink).toBeVisible();
+    await expect(privacyLink).toHaveText(`Privacy Policy`);
 
+    // ---------------------------
+    // CLICK ON PRIVACY POLICY AND CHECK RESULT
+    // ---------------------------
+    
+    //Arrange
+    const modal = page.locator(`#modal-agree`);
 
+    //Act
+    await page.getByText(`Privacy Policy`).click();
 
- 
+    //Assert
+    await expect(modal).toBeVisible();
+    await expect(modal).toContainText(`Privacy Policy`);
+
+    //Act
+    
+
+    
 });
