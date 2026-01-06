@@ -220,14 +220,16 @@ test('Locators on registration form', async ({ page }) => {
     const modal = page.locator(`#modal-agree`);
 
     //Act
-    await page.getByText(`Privacy Policy`).click();
+    await page.getByRole(`link`, { name: `Privacy Policy`}).click();
 
-    //Assert
+    //Assert: modal is visible
     await expect(modal).toBeVisible();
     await expect(modal).toContainText(`Privacy Policy`);
 
-    //Act
-    
+    //Act: close the modal
+    await page.locator(`#modal-agree button.close`).click();
 
+    //Assert: modal is not visible
+    await expect(page.locator('#modal-agree')).not.toBeVisible();
     
 });
